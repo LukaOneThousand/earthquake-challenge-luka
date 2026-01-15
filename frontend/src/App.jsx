@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { MapContainer, TileLayer } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 
 function App() {
   const [count, setCount] = useState(null)
@@ -11,13 +13,29 @@ function App() {
       .catch(err => setError(err.message))
   }, [])
 
-  if (error) return <div>Error: {error}</div>
-  if (count === null) return <div>Loading...</div>
-
   return (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
-      <h1>Earthquake Count</h1>
-      <p style={{ fontSize: '4rem', fontWeight: 'bold' }}>{count}</p>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <header style={{ padding: '1rem', background: '#1a1a2e', color: 'white', textAlign: 'center' }}>
+        <h1 style={{ margin: 0 }}>Earthquake Dashboard</h1>
+        {error && <p style={{ color: '#ff6b6b' }}>Error: {error}</p>}
+        {count !== null && (
+          <p style={{ margin: '0.5rem 0 0 0' }}>
+            Earthquakes in last 24h: <strong>{count}</strong>
+          </p>
+        )}
+      </header>
+      <div style={{ flex: 1 }}>
+        <MapContainer
+          center={[20, 0]}
+          zoom={2}
+          style={{ height: '100%', width: '100%' }}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+        </MapContainer>
+      </div>
     </div>
   )
 }
