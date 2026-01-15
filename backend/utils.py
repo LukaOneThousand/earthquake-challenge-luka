@@ -4,6 +4,7 @@ import httpx
 USGS_EARTHQUAKE_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson"
 
 
+
 async def fetch_earthquake_data() -> dict:
     """
     Fetches earthquake data from the USGS GeoJSON feed.
@@ -26,3 +27,13 @@ async def fetch_earthquake_data() -> dict:
     except httpx.RequestError as e:
         raise HTTPException(status_code=503, detail=f"Network error: Unable to reach USGS API")
 
+
+async def count_earthquakes() -> int:
+    """
+    Fetches earthquake data and returns the count of earthquakes.
+
+    Returns:
+        The number of earthquakes reported in the last day.
+    """
+    data = await fetch_earthquake_data()
+    return len(data.get("features", []))
