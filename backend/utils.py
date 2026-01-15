@@ -37,3 +37,32 @@ async def count_earthquakes() -> int:
     """
     data = await fetch_earthquake_data()
     return len(data.get("features", []))
+
+
+async def get_earthquake_locations() -> list[dict]:
+    """
+    Fetches earthquake data and extracts location coordinates with metadata.
+
+    Returns:
+        List of earthquakes with id, coordinates (lat, lng), magnitude, place, time, and depth.
+    """
+    data = await fetch_earthquake_data()
+    locations = []
+
+    for feature in data.get("features", []):
+        props = feature.get("properties", {})
+        geometry = feature.get("geometry", {})
+        coords = geometry.get("coordinates", [])
+
+        if len(coords) >= 2:
+            locations.append({
+                "id": feature.get("id"),
+                "lng": coords[0],
+                "lat": coords[1],
+                "depth": coords[2] if len(coords) > 2 else None,
+                "magnitude": props.get("mag"),
+                "place": props.get("place"),
+                "time": props.get("time"),
+            })
+
+    return locations
