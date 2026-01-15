@@ -30,6 +30,20 @@ USGS provides free, real-time earthquake data via GeoJSON feeds:
 
 See [DATA.md](./DATA.md) for detailed field documentation.
 
+## Getting Started
+
+### Install Dependencies
+
+```bash
+mamba install --file requirements.txt
+```
+
+### Run the Project
+
+```bash
+python main.py
+```
+
 ## Rules
 
 1. **Fork this repo** - work on your own copy
